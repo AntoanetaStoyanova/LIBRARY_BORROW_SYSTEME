@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borrow Book</title>
+</head>
+<body>
+    <h1>Borrow Book</h1>
+    <form id="borrow-form">
+        <label for="book-id">Book ID:</label>
+        <input type="number" id="book-id" name="book-id" required><br>
+        <label for="user-id">User ID:</label>
+        <input type="number" id="user-id" name="user-id" required><br>
+        <button type="submit">Borrow</button>
+    </form>
+    <div id="result-message"></div>
+    <script>
+        document.getElementById('borrow-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const bookId = document.getElementById('book-id').value;
+            const userId = document.getElementById('user-id').value;
+            try {
+                const response = await fetch(`/borrow/${bookId}/${userId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('result-message').innerText = data.message;
+                } else {
+                    document.getElementById('result-message').innerText = 'Failed to borrow the book.';
+                }
+            } catch (error) {
+                document.getElementById('result-message').innerText = 'An error occurred.';
+            }
+        });
+    </script>
+</body>
+</html>

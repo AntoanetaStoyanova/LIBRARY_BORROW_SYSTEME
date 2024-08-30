@@ -1,0 +1,6 @@
+flask
+uvicorn 
+python-dotenv
+sqlalchemy
+psycopg2
+fastapi
